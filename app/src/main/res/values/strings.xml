@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Downloader</string>
+    <string name="tab_active">التنزيلات</string>
+    <string name="tab_browser">المتصفح</string>
+    <string name="tab_library">المكتبة</string>
+    <string name="paste_link_hint">الصق رابط التنزيل هنا</string>
+    <string name="start_download">بدء التنزيل</string>
+    <string name="no_downloads">لا توجد تنزيلات جارية</string>
+    <string name="no_files">لا توجد ملفات في المكتبة بعد</string>
+</resources>
