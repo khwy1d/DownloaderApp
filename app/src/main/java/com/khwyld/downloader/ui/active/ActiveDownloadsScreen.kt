@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.khwyld.downloader.domain.model.DownloadStatus
 import com.khwyld.downloader.domain.model.DownloadTask
+import com.khwyld.downloader.domain.model.VideoStreamOption
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,6 +22,8 @@ fun ActiveDownloadsScreen(
 ) {
     val downloads by viewModel.activeDownloads.collectAsState()
     val error by viewModel.errorMessage.collectAsState()
+    val isResolving by viewModel.isResolving.collectAsState()
+    val pendingVideoOptions by viewModel.pendingVideoOptions.collectAsState()
     var linkText by remember { mutableStateOf(prefillUrl.orEmpty()) }
 
     // إذا وصل رابط عبر المشاركة نبدأ التنزيل تلقائيًا مرة واحدة
@@ -42,13 +45,20 @@ fun ActiveDownloadsScreen(
                 singleLine = true
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {
-                if (linkText.isNotBlank()) {
-                    viewModel.onPasteLink(linkText)
-                    linkText = ""
+            Button(
+                enabled = !isResolving,
+                onClick = {
+                    if (linkText.isNotBlank()) {
+                        viewModel.onPasteLink(linkText)
+                        linkText = ""
+                    }
                 }
-            }) {
-                Text("بدء")
+            ) {
+                if (isResolving) {
+                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                } else {
+                    Text("بدء")
+                }
             }
         }
 
@@ -75,6 +85,46 @@ fun ActiveDownloadsScreen(
             }
         }
     }
+
+    pendingVideoOptions?.let { videoPage ->
+        VideoQualityPickerDialog(
+            title = videoPage.title,
+            streams = videoPage.streams,
+            onSelect = { stream -> viewModel.onStreamSelected(videoPage.title, stream) },
+            onDismiss = { viewModel.onDismissVideoOptions() }
+        )
+    }
+}
+
+@Composable
+private fun VideoQualityPickerDialog(
+    title: String,
+    streams: List<VideoStreamOption>,
+    onSelect: (VideoStreamOption) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title, maxLines = 2) },
+        text = {
+            Column {
+                Text("اختر جودة التنزيل:", color = MaterialTheme.colorScheme.outline)
+                Spacer(modifier = Modifier.height(8.dp))
+                streams.forEach { stream ->
+                    TextButton(
+                        onClick = { onSelect(stream) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stream.label, modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("إلغاء") }
+        }
+    )
 }
 
 @Composable

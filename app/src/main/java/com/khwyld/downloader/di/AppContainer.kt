@@ -6,9 +6,11 @@ import com.khwyld.downloader.data.download.DownloadRepositoryImpl
 import com.khwyld.downloader.data.download.engine.DownloadEngine
 import com.khwyld.downloader.data.download.engine.SystemDownloadEngine
 import com.khwyld.downloader.data.download.notification.NotificationController
+import com.khwyld.downloader.data.download.resolver.VideoResolverRepositoryImpl
 import com.khwyld.downloader.data.local.AppDatabase
 import com.khwyld.downloader.domain.repository.BrowserRepository
 import com.khwyld.downloader.domain.repository.DownloadRepository
+import com.khwyld.downloader.domain.repository.VideoResolverRepository
 import com.khwyld.downloader.domain.usecase.*
 
 /**
@@ -31,6 +33,10 @@ class AppContainer(context: Context) {
         BrowserRepositoryImpl(database.historyDao())
     }
 
+    private val videoResolverRepository: VideoResolverRepository by lazy {
+        VideoResolverRepositoryImpl()
+    }
+
     // ---- UseCases ----
     val startDownloadUseCase by lazy { StartDownloadUseCase(downloadRepository) }
     val observeActiveDownloadsUseCase by lazy { ObserveActiveDownloadsUseCase(downloadRepository) }
@@ -40,4 +46,5 @@ class AppContainer(context: Context) {
     val deleteFromLibraryUseCase by lazy { DeleteFromLibraryUseCase(downloadRepository) }
     val addHistoryUseCase by lazy { AddHistoryUseCase(browserRepository) }
     val observeHistoryUseCase by lazy { ObserveHistoryUseCase(browserRepository) }
+    val resolveLinkUseCase by lazy { ResolveLinkUseCase(videoResolverRepository) }
 }

@@ -74,7 +74,8 @@ fun DownloaderApp(container: AppContainer, pendingSharedUrl: String?) {
                             container.observeActiveDownloadsUseCase,
                             container.refreshActiveDownloadsUseCase,
                             container.cancelDownloadUseCase,
-                            container.startDownloadUseCase
+                            container.startDownloadUseCase,
+                            container.resolveLinkUseCase
                         )
                     }
                     ActiveDownloadsScreen(viewModel = vm, prefillUrl = pendingSharedUrl)

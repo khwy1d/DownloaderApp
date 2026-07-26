@@ -69,5 +69,9 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // Video resolving (YouTube) — تحقق من آخر إصدار على jitpack.io/#TeamNewPipe/NewPipeExtractor
+    implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.24.4")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
