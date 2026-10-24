@@ -71,7 +71,8 @@ dependencies {
 
     // YouTube extraction: newer versions include fixes for YouTube's SABR changes.
     implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.5")
-    implementation("com.squareup.okhttp3:okhttp:5.4.0")
+    // Keep OkHttp 4.x: OkHttp 5.4.0 requires compileSdk 36+, while this app uses 34.
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
